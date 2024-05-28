@@ -1,0 +1,14 @@
+.active {
+    background-color: rgb(127,173,57);
+    color: white;
+    padding: 2px 8px;
+}
+.full-width-select {
+    width: 100%;
+    border: none;
+    /* Optionally, to keep some styling, you can add the following lines */
+    background-color: transparent; /* Adjust background if needed */
+    padding: 0; /* Adjust padding if needed */
+    box-shadow: none; /* Remove shadow if any */
+    outline: none; /* Remove outline if any */
+}
