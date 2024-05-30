@@ -5,6 +5,7 @@ import { environment } from '../../environments/environment';
 import { Product } from '../models/product';
 import { UpdateProductDTO } from '../dtos/product/update.product.dto';
 import { InsertProductDTO } from '../dtos/product/insert.product.dto';
+import { Comment } from '../models/comment';
 
 @Injectable({
   providedIn: 'root'
@@ -86,6 +87,24 @@ export class ProductService {
       userId: userId.toString(),
     };
     return this.http.delete(`${this.apiBaseUrl}/products/delete-favourite`, { params ,responseType: 'text'},);
+  }
+
+  getComment( userId:string,productId: number):Observable<any> {
+    debugger
+    const params = {
+      product_id: productId.toString(),
+      userid: userId
+    }    
+      return this.http.get(`${environment.apiBaseUrl}/comments`, { params });           
+  }   
+  deleteComment(id: number): Observable<string> {
+    debugger
+    return this.http.delete<string>(`${this.apiBaseUrl}/categories/${id}`);
+  }
+  insertComment(comment: Comment): Observable<any> {
+    debugger
+    // Add a new category
+    return this.http.post(`${this.apiBaseUrl}/comments`, comment);
   }
 }
 //update.category.admin.component.html

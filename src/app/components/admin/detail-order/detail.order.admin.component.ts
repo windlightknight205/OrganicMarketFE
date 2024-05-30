@@ -1,9 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgForm } from '@angular/forms';
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { OrderDTO } from '../../../dtos/order/order.dto';
 import { OrderResponse } from '../../../responses/order/order.response';
@@ -41,7 +37,7 @@ export class DetailOrderAdminComponent implements OnInit{
     private orderService: OrderService,
     private route: ActivatedRoute,
     private router: Router,
-    private messageService: MessageService
+    private messageService: MessageService,
     ) {}
 
   ngOnInit(): void {
@@ -130,4 +126,6 @@ export class DetailOrderAdminComponent implements OnInit{
       }
     });   
   }
+
+
 }

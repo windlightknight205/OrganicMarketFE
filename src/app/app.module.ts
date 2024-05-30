@@ -29,6 +29,7 @@ import { FavouriteComponent } from './components/favourite/favourite..component'
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CommentService } from './services/comment.service';
 
 
 @NgModule({
@@ -73,7 +74,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
       multi: true,
-    },MessageService
+    },MessageService,
   ],
   bootstrap: [
     AppComponent
