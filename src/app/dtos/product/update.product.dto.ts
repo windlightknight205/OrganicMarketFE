@@ -7,9 +7,9 @@ import {
 export class UpdateProductDTO {
     @IsPhoneNumber()
     name: string;
-
+    weight: string;
     price: number;
-
+    thumbnail :string;
     @IsString()
     @IsNotEmpty()
     description: string;
@@ -21,5 +21,7 @@ export class UpdateProductDTO {
         this.price = data.price;
         this.description = data.description;
         this.category_id = data.category_id;
+        this.thumbnail = data.thumbnail;
+        this.weight =data.weight;
     }
 }

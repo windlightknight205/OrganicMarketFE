@@ -14,6 +14,7 @@ import { ProductImage } from '../../models/product.image';
 
 export class DetailProductComponent implements OnInit {
   product?: Product;
+  products: Product[] = [];
   productId: number = 0;
   currentImageIndex: number = 0;
   quantity: number = 1;
@@ -38,6 +39,7 @@ export class DetailProductComponent implements OnInit {
         this.productId = +idParam;
       }
       if (!isNaN(this.productId)) {
+        debugger
         this.productService.getDetailProduct(this.productId).subscribe({
           next: (response: any) => {            
             // Lấy danh sách ảnh sản phẩm và thay đổi URL
@@ -51,6 +53,7 @@ export class DetailProductComponent implements OnInit {
             this.product = response 
             // Bắt đầu với ảnh đầu tiên
             this.showImage(0);
+            this.getProducts('',Number(this.product?.category_id),0,4); 
           },
           complete: () => {
             debugger;
@@ -62,7 +65,27 @@ export class DetailProductComponent implements OnInit {
         });    
       } else {
         console.error('Invalid productId:', idParam);
-      }      
+      }
+         
+    }
+    getProducts(keyword: string, selectedCategoryId: number, page: number, limit: number) {
+      debugger;
+      this.productService.getProducts(keyword, selectedCategoryId, page, limit).subscribe({
+        next: (response: any) => {
+          debugger;
+          response.products.forEach((product: Product) => {
+            product.url = `${environment.apiBaseUrl}/products/images/${product.thumbnail}`;
+          });
+          this.products = response.products;
+        },
+        complete: () => {
+          debugger;
+        },
+        error: (error: any) => {
+          debugger;
+          console.error('Error fetching products:', error);
+        }
+      });
     }
     showImage(index: number): void {
       debugger
@@ -125,4 +148,22 @@ export class DetailProductComponent implements OnInit {
       }
       this.router.navigate(['/orders']);
     }    
+    onProductClick(productId: number) {
+      debugger;
+      // Điều hướng đến trang detail-product với productId là tham số
+      this.router.navigate(['/products', productId]).then(() => {
+        // Force reload the current page
+        window.location.reload()})
+    }
+  
+    addToCartP(productId:number): void {
+      debugger
+      this.isPressedAddToCart = true;
+      this.cartService.addToCart(productId, 1);
+    }
+  
+    buyNowP(productId:number): void {
+      this.cartService.addToCart(productId, 1);
+      this.router.navigate(['/orders']);
+    }
 }

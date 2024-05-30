@@ -59,5 +59,33 @@ export class ProductService {
     debugger
     return this.http.delete(`${this.apiBaseUrl}/product_images/${id}`)
   }
+  addFavourite(
+    productId: number,
+    userId: number
+  ): Observable<any> {
+    const params = {
+      productId: productId.toString(),
+      userId: userId.toString(),
+    };
+    return this.http.post(`${this.apiBaseUrl}/products/favourite`,null, { params });
+  }
+
+  getFavourite(userId:number): Observable<any> {
+    const params = {
+      userId: userId.toString(),
+    };
+    return this.http.get(`${this.apiBaseUrl}/products/favourite`,{ params });
+  }
+
+  deleteFavourite(
+    productId: number,
+    userId: number
+  ): Observable<any> {
+    const params = {
+      productId: productId.toString(),
+      userId: userId.toString(),
+    };
+    return this.http.delete(`${this.apiBaseUrl}/products/delete-favourite`, { params ,responseType: 'text'},);
+  }
 }
 //update.category.admin.component.html

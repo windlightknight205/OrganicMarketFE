@@ -15,6 +15,8 @@ export class InsertProductAdminComponent implements OnInit {
     name: '',
     price: 0,
     description: '',
+    weight: '',
+    thumbnail:'',
     category_id: 1,
     images: []
   };
@@ -48,15 +50,17 @@ export class InsertProductAdminComponent implements OnInit {
     // Retrieve selected files from input element
     const files = event.target.files;
     // Limit the number of selected files to 5
-    if (files.length > 5) {
-      alert('Please select a maximum of 5 images.');
+    if (files.length > 4) {
+      alert('Please select a maximum of 4 images.');
       return;
     }
     // Store the selected files in the newProduct object
     this.insertProductDTO.images = files;
+    this.insertProductDTO.thumbnail= files[0].name;
   }
 
-  insertProduct() {    
+  insertProduct() {   
+    debugger
     this.productService.insertProduct(this.insertProductDTO).subscribe({
       next: (response) => {
         debugger

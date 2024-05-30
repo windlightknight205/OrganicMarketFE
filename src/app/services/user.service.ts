@@ -7,6 +7,7 @@ import { environment } from '../../environments/environment';
 import { HttpUtilService } from './http.util.service';
 import { UserResponse } from '../responses/user/user.response';
 import { UpdateUserDTO } from '../dtos/user/update.user.dto';
+import { ApiResponse } from '../responses/api.response';
 
 @Injectable({
   providedIn: 'root'
@@ -91,5 +92,17 @@ export class UserService {
       // Handle the error as needed
     }
   }
-  
+  getUsers(params: { page: number, limit: number, keyword: string }): Observable<ApiResponse> {
+    const url = `${environment.apiBaseUrl}/users`;
+    return this.http.get<ApiResponse>(url, { params: params });
+  }
+  resetPassword(userId: number): Observable<ApiResponse> {
+    const url = `${environment.apiBaseUrl}/users/reset-password/${userId}`;
+    return this.http.put<ApiResponse>(url, null, this.apiConfig);
+  }
+
+  toggleUserStatus(params: { userId: number, enable: boolean }): Observable<ApiResponse> {
+    const url = `${environment.apiBaseUrl}/users/block/${params.userId}/${params.enable ? '1' : '0'}`;
+    return this.http.put<ApiResponse>(url, null, this.apiConfig);
+  }
 }

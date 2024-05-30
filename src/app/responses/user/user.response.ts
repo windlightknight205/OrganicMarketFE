@@ -3,6 +3,7 @@ export interface UserResponse {
     id: number;
     fullname: string;
     address:string;
+    phone_number:string;
     is_active: boolean;
     date_of_birth: Date;
     facebook_account_id: number;

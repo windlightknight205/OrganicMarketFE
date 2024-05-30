@@ -12,7 +12,7 @@ import { Order } from '../../models/order';
 
 @Component({
   selector: 'app-order',
-  templateUrl: './order.component.html',
+  templateUrl: './test.component.html',
   styleUrls: ['./order.component.scss']
 })
 export class OrderComponent implements OnInit{

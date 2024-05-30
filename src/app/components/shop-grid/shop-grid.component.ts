@@ -5,6 +5,7 @@ import { ProductService } from 'src/app/services/product.service';
 import { Product } from '../../models/product';
 import { Category } from '../../models/category';
 import { environment } from '../../../environments/environment';
+import { CartService } from 'src/app/services/cart.service';
 
 @Component({
   selector: 'app-shop-grid',
@@ -21,11 +22,13 @@ export class ShopGridComponent {
   totalPages:number = 0;
   visiblePages: number[] = [];
   keyword:string = "";
+  isPressedAddToCart: boolean = false;
 
   constructor(
     private productService: ProductService,
     private categoryService: CategoryService,    
     private router: Router,
+    private cartService: CartService
     ) {}
 
     ngOnInit() {
@@ -110,5 +113,15 @@ export class ShopGridComponent {
       debugger;
       // Điều hướng đến trang detail-product với productId là tham số
       this.router.navigate(['/products', productId]);
+    }
+    addToCart(productId:number): void {
+      debugger
+      this.isPressedAddToCart = true;
+      this.cartService.addToCart(productId, 1);
+    }
+  
+    buyNow(productId:number): void {
+      this.cartService.addToCart(productId, 1);
+      this.router.navigate(['/orders']);
     }
 }

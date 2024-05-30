@@ -15,6 +15,9 @@ import { AuthGuardFn } from './guards/auth.guard';
 import { AdminGuardFn } from './guards/admin.guard';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ShopGridComponent } from './components/shop-grid/shop-grid.component';
+import { HistoryComponent } from './components/history/history.component';
+import { BlogComponent } from './components/blog/blog.component';
+import { FavouriteComponent } from './components/favourite/favourite..component';
 //import { OrderAdminComponent } from './components/admin/order/order.admin.component';
 
 const routes: Routes = [
@@ -27,6 +30,10 @@ const routes: Routes = [
   { path: 'orders/:id', component: OrderDetailComponent },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'shop-grid', component: ShopGridComponent },
+  { path: 'history', component: HistoryComponent },
+  { path: 'order-detail/:id', component: OrderDetailComponent },
+  { path: 'blog', component: BlogComponent },
+  {path:'favourite', component: FavouriteComponent},
   //Admin   
   {
     path: 'admin',

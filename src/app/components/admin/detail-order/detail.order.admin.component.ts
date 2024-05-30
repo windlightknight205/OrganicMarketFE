@@ -8,6 +8,7 @@ import { environment } from '../../../../environments/environment';
 import { OrderDTO } from '../../../dtos/order/order.dto';
 import { OrderResponse } from '../../../responses/order/order.response';
 import { OrderService } from '../../../services/order.service';
+import { MessageService } from 'primeng/api';
 
 
 @Component({
@@ -39,13 +40,18 @@ export class DetailOrderAdminComponent implements OnInit{
   constructor(
     private orderService: OrderService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private messageService: MessageService
     ) {}
 
   ngOnInit(): void {
     this.getOrderDetails();
   }
   
+  executeToast(message: string) {
+    this.messageService.add({severity:'success', summary: '', detail: message});
+  }
+
   getOrderDetails(): void {
     debugger
     this.orderId = Number(this.route.snapshot.paramMap.get('id'));
@@ -60,13 +66,14 @@ export class DetailOrderAdminComponent implements OnInit{
         this.orderResponse.address = response.address; 
         this.orderResponse.note = response.note;
         this.orderResponse.total_money = response.total_money;
-        if (response.order_date) {
-          this.orderResponse.order_date = new Date(
-            response.order_date[0], 
-            response.order_date[1] - 1, 
-            response.order_date[2]
-          );        
-        }        
+        this.orderResponse.order_date = response.order_date;
+        // if (response.order_date) {
+        //   this.orderResponse.order_date = new Date(
+        //     response.order_date[0], 
+        //     response.order_date[1]-1, 
+        //     response.order_date[2]
+        //   );        
+        // }        
         this.orderResponse.order_details = response.order_details
           .map((order_detail:any) => {
           order_detail.product.thumbnail = `${environment.apiBaseUrl}/products/images/${order_detail.product.thumbnail}`;
@@ -75,13 +82,14 @@ export class DetailOrderAdminComponent implements OnInit{
           return order_detail;
         });        
         this.orderResponse.payment_method = response.payment_method;
-        if (response.shipping_date) {
-          this.orderResponse.shipping_date = new Date(
-            response.shipping_date[0],
-            response.shipping_date[1] - 1,
-            response.shipping_date[2]
-          );
-        }         
+        // if (response.shipping_date) {
+        //   this.orderResponse.shipping_date = new Date(
+        //     response.shipping_date[0],
+        //     response.shipping_date[1]-1,
+        //     response.shipping_date[2]
+        //   );
+        // }
+        this.orderResponse.shipping_date = response.shipping_date;         
         this.orderResponse.shipping_method = response.shipping_method;        
         this.orderResponse.status = response.status;     
         debugger   
@@ -96,7 +104,8 @@ export class DetailOrderAdminComponent implements OnInit{
     });
   }    
   
-  saveOrder(): void {    
+  saveOrder(): void { 
+    console.log(this.orderResponse)   
     debugger    
     this.orderService
       .updateOrder(this.orderId, new OrderDTO(this.orderResponse))
@@ -105,10 +114,13 @@ export class DetailOrderAdminComponent implements OnInit{
         debugger
         // Handle the successful update
         console.log('Order updated successfully:', response);
-        // Navigate back to the previous page
-        this.router.navigate(['../'], { relativeTo: this.route });
+        // Navigate back to the previous page       
       },
       complete: () => {
+        this.executeToast('Lưu thành công')
+        setTimeout(() => {
+          this.router.navigate(['../'], { relativeTo: this.route }); 
+        }, 1000);  
         debugger;        
       },
       error: (error: any) => {

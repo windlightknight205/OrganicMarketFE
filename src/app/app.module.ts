@@ -23,6 +23,13 @@ import {
 } from '@angular/common/http';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ShopGridComponent } from './components/shop-grid/shop-grid.component';
+import { HistoryComponent } from './components/history/history.component';
+import { BlogComponent } from './components/blog/blog.component';
+import { FavouriteComponent } from './components/favourite/favourite..component';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 
 @NgModule({
   declarations: [    
@@ -37,7 +44,10 @@ import { ShopGridComponent } from './components/shop-grid/shop-grid.component';
     RegisterComponent, 
     UserProfileComponent,
     AppComponent,
-    ShopGridComponent,    
+    ShopGridComponent,
+    HistoryComponent,
+    BlogComponent,
+    FavouriteComponent,
     //admin    
     //AdminComponent,
     //OrderAdminComponent,
@@ -52,15 +62,18 @@ import { ShopGridComponent } from './components/shop-grid/shop-grid.component';
     FormsModule,
     HttpClientModule,    
     AppRoutingModule,    
-    NgbModule,        
+    NgbModule,
+    BrowserModule,
+    BrowserAnimationsModule,        
     AdminModule,
+    ToastModule,
   ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
       multi: true,
-    },
+    },MessageService
   ],
   bootstrap: [
     AppComponent

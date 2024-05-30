@@ -22,17 +22,18 @@ export class UpdateProductAdminComponent implements OnInit {
   categories: Category[] = []; // Dữ liệu động từ categoryService
   currentImageIndex: number = 0;
   images: File[] = [];
+  thumnail:string='';
 
   constructor(
     private productService: ProductService,
     private route: ActivatedRoute,
     private router: Router,
-    private categoryService: CategoryService,    
+    private categoryService: CategoryService,
     private location: Location,
   ) {
     this.productId = 0;
     this.product = {} as Product;
-    this.updatedProduct = {} as Product;  
+    this.updatedProduct = {} as Product;
   }
 
   ngOnInit(): void {
@@ -59,52 +60,56 @@ export class UpdateProductAdminComponent implements OnInit {
   getProductDetails(): void {
     this.productService.getDetailProduct(this.productId).subscribe({
       next: (product: Product) => {
+        debugger
         this.product = product;
-        this.updatedProduct = { ...product };                
-        this.updatedProduct.product_images.forEach((product_image:ProductImage) => {
+        this.updatedProduct = { ...product };
+        this.updatedProduct.product_images.forEach((product_image: ProductImage) => {
           product_image.image_url = `${environment.apiBaseUrl}/products/images/${product_image.image_url}`;
         });
       },
       complete: () => {
-        
+
       },
       error: (error: any) => {
-        
+
       }
-    });     
+    });
   }
   updateProduct() {
     // Implement your update logic here
+    debugger
     const updateProductDTO: UpdateProductDTO = {
       name: this.updatedProduct.name,
       price: this.updatedProduct.price,
+      weight: this.updatedProduct.weight,
+      thumbnail: this.thumnail,
       description: this.updatedProduct.description,
       category_id: this.updatedProduct.category_id
     };
     this.productService.updateProduct(this.product.id, updateProductDTO).subscribe({
-      next: (response: any) => {  
-        debugger        
+      next: (response: any) => {
+        debugger
       },
       complete: () => {
         debugger;
-        this.router.navigate(['/admin/products']);        
+        this.router.navigate(['/admin/products']);
       },
       error: (error: any) => {
         debugger;
         console.error('Error fetching products:', error);
       }
-    });  
+    });
   }
   showImage(index: number): void {
     debugger
-    if (this.product && this.product.product_images && 
-        this.product.product_images.length > 0) {
+    if (this.product && this.product.product_images &&
+      this.product.product_images.length > 0) {
       // Đảm bảo index nằm trong khoảng hợp lệ        
       if (index < 0) {
         index = 0;
       } else if (index >= this.product.product_images.length) {
         index = this.product.product_images.length - 1;
-      }        
+      }
       // Gán index hiện tại và cập nhật ảnh hiển thị
       this.currentImageIndex = index;
     }
@@ -113,7 +118,7 @@ export class UpdateProductAdminComponent implements OnInit {
     debugger
     // Gọi khi một thumbnail được bấm
     this.currentImageIndex = index; // Cập nhật currentImageIndex
-  }  
+  }
   nextImage(): void {
     debugger
     this.showImage(this.currentImageIndex + 1);
@@ -122,25 +127,28 @@ export class UpdateProductAdminComponent implements OnInit {
   previousImage(): void {
     debugger
     this.showImage(this.currentImageIndex - 1);
-  }  
+  }
   onFileChange(event: any) {
     // Retrieve selected files from input element
     const files = event.target.files;
     // Limit the number of selected files to 5
-    if (files.length > 5) {
-      alert('Please select a maximum of 5 images.');
+    if (files.length > 4) {
+      alert('Please select a maximum of 4 images.');
       return;
     }
     // Store the selected files in the newProduct object
     this.images = files;
+    if(files){
+      this.thumnail=this.images[0].name;
+    }
     this.productService.uploadImages(this.productId, this.images).subscribe({
       next: (imageResponse) => {
         debugger
         // Handle the uploaded images response if needed              
         console.log('Images uploaded successfully:', imageResponse);
-        this.images = [];       
+        // this.images = [];
         // Reload product details to reflect the new images
-        this.getProductDetails(); 
+        this.getProductDetails();
       },
       error: (error) => {
         // Handle the error while uploading images
@@ -153,15 +161,15 @@ export class UpdateProductAdminComponent implements OnInit {
     if (confirm('Are you sure you want to remove this image?')) {
       // Call the removeImage() method to remove the image   
       this.productService.deleteProductImage(productImage.id).subscribe({
-        next:(productImage: ProductImage) => {
-          location.reload();          
-        },        
+        next: (productImage: ProductImage) => {
+          location.reload();
+        },
         error: (error) => {
           // Handle the error while uploading images
           alert(error.error)
           console.error('Error deleting images:', error);
         }
       });
-    }   
+    }
   }
 }

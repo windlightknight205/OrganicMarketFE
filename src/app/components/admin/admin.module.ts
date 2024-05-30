@@ -15,25 +15,36 @@ import { UpdateCategoryAdminComponent } from './category/update/update.category.
 
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { UserAdminComponent } from './user/user.admin.component';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 @NgModule({
   declarations: [
     AdminComponent,
-    OrderAdminComponent,    
+    OrderAdminComponent,
     ProductAdminComponent,
     CategoryAdminComponent,
+    UserAdminComponent,
     //sub-components
     DetailOrderAdminComponent,
     UpdateProductAdminComponent,
     InsertProductAdminComponent,
 
     InsertCategoryAdminComponent,
-    UpdateCategoryAdminComponent
+    UpdateCategoryAdminComponent,
   ],
   imports: [
     AdminRoutingModule, // import routes,
     CommonModule,
-    FormsModule
-  ]
+    FormsModule,
+    ToastModule,
+    BrowserModule,
+    BrowserAnimationsModule
+  ],
+  providers:
+    [MessageService],
 })
-export class AdminModule {}
+export class AdminModule { }
