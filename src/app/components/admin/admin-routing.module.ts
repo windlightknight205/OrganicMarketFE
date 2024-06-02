@@ -1,7 +1,7 @@
 import { AdminComponent } from "./admin.component";
 import { OrderAdminComponent } from "./order/order.admin.component";
-import { DetailOrderAdminComponent } from "./detail-order/detail.order.admin.component";
-import { Route, Router,Routes } from "@angular/router";
+import { DetailOrderAdminComponent } from "./order/detail-order/detail.order.admin.component";
+import { Route, Router, Routes } from "@angular/router";
 import { NgModule } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { ProductAdminComponent } from "./product/product.admin.component";
@@ -11,6 +11,9 @@ import { InsertProductAdminComponent } from "./product/insert/insert.product.adm
 import { InsertCategoryAdminComponent } from "./category/insert/insert.category.admin.component";
 import { UpdateCategoryAdminComponent } from "./category/update/update.category.admin.component";
 import { UserAdminComponent } from "./user/user.admin.component";
+import { CouponAdminComponent } from "./coupon/coupon.admin.component";
+import { DetailCouponAdminComponent } from "./coupon/detail-coupon/detail.coupon.admin.component";
+import { InsertCouponAdminComponent } from "./coupon/insert/insert.coupon.admin.component";
 
 const routes: Routes = [
     {
@@ -20,7 +23,7 @@ const routes: Routes = [
             {
                 path: 'orders',
                 component: OrderAdminComponent
-            },            
+            },
             {
                 path: 'products',
                 component: ProductAdminComponent
@@ -30,7 +33,7 @@ const routes: Routes = [
                 component: CategoryAdminComponent
             },
             {
-                path:'user',
+                path: 'user',
                 component: UserAdminComponent
             },
             //sub path
@@ -55,6 +58,18 @@ const routes: Routes = [
                 path: 'categories/insert',
                 component: InsertCategoryAdminComponent
             },
+            {
+                path: 'coupon',
+                component: CouponAdminComponent
+            },
+            {
+                path: 'coupon/detail/:id',
+                component: DetailCouponAdminComponent
+            },
+            {
+                path: 'coupon/insert',
+                component: InsertCouponAdminComponent
+            }
         ]
     }
 ];

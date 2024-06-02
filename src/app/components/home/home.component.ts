@@ -11,7 +11,7 @@ import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-home',
-  templateUrl: './home1.component.html',
+  templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {

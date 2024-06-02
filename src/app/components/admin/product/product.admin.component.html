@@ -31,7 +31,7 @@
         <tr *ngFor="let product of products">
           <td>{{ product.id }}</td>
           <td>{{ product.name }}</td>
-          <td>{{ product.price }}</td>
+          <td>{{ product.price| number:'1.0-0' }}<sup>đ</sup></td>
           <td>
             <img src="{{ product.url }}" 
               class="rounded-square" alt="Thumbnail"

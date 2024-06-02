@@ -4,7 +4,7 @@ import { AdminRoutingModule } from './admin-routing.module';
 
 import { AdminComponent } from './admin.component';
 import { OrderAdminComponent } from './order/order.admin.component';
-import { DetailOrderAdminComponent } from './detail-order/detail.order.admin.component';
+import { DetailOrderAdminComponent } from './order/detail-order/detail.order.admin.component';
 import { ProductAdminComponent } from './product/product.admin.component';
 import { UpdateProductAdminComponent } from './product/update/update.product.admin.component';
 import { InsertProductAdminComponent } from './product/insert/insert.product.admin.component';
@@ -20,6 +20,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { CouponAdminComponent } from './coupon/coupon.admin.component';
+import { DetailCouponAdminComponent } from './coupon/detail-coupon/detail.coupon.admin.component';
+import { InsertCouponAdminComponent } from './coupon/insert/insert.coupon.admin.component';
 
 @NgModule({
   declarations: [
@@ -28,13 +31,15 @@ import { MessageService } from 'primeng/api';
     ProductAdminComponent,
     CategoryAdminComponent,
     UserAdminComponent,
+    CouponAdminComponent,
     //sub-components
+    DetailCouponAdminComponent,
     DetailOrderAdminComponent,
     UpdateProductAdminComponent,
     InsertProductAdminComponent,
-
     InsertCategoryAdminComponent,
     UpdateCategoryAdminComponent,
+    InsertCouponAdminComponent
   ],
   imports: [
     AdminRoutingModule, // import routes,

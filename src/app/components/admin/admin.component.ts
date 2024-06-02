@@ -7,31 +7,31 @@ import { TokenService } from '../../services/token.service';
   selector: 'app-admin',
   templateUrl: './admin.component.html',
   styleUrls: [
-    './admin.component.scss',        
+    './admin.component.scss',
   ]
 })
 export class AdminComponent implements OnInit {
   //adminComponent: string = 'orders';
-  userResponse?:UserResponse | null;
+  userResponse?: UserResponse | null;
   constructor(
-    private userService: UserService,       
-    private tokenService: TokenService,    
+    private userService: UserService,
+    private tokenService: TokenService,
     private router: Router,
   ) {
-    
-   }
+
+  }
   ngOnInit() {
-    this.userResponse = this.userService.getUserResponseFromLocalStorage();    
+    this.userResponse = this.userService.getUserResponseFromLocalStorage();
     // Default router
     debugger
     if (this.router.url === '/admin') {
       this.router.navigate(['/admin/orders']);
     }
-   }  
+  }
   logout() {
     this.userService.removeUserFromLocalStorage();
     this.tokenService.removeToken();
-    this.userResponse = this.userService.getUserResponseFromLocalStorage();    
+    this.userResponse = this.userService.getUserResponseFromLocalStorage();
     this.router.navigate(['/']);
   }
   showAdminComponent(componentName: string): void {
@@ -41,6 +41,8 @@ export class AdminComponent implements OnInit {
       this.router.navigate(['/admin/categories']);
     } else if (componentName === 'products') {
       this.router.navigate(['/admin/products']);
+    } else if (componentName === 'coupon') {
+      this.router.navigate(['/admin/coupon']);
     }
   }
 }

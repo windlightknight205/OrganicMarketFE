@@ -9,18 +9,23 @@ import { OrderDTO } from '../../dtos/order/order.dto';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Order } from '../../models/order';
+import { ApiResponse } from 'src/app/responses/api.response';
+import { CouponService } from 'src/app/services/coupon.service';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-order',
-  templateUrl: './test.component.html',
+  templateUrl: './order.component.html',
   styleUrls: ['./order.component.scss']
 })
-export class OrderComponent implements OnInit{
+export class OrderComponent implements OnInit {
   orderForm: FormGroup; // Đối tượng FormGroup để quản lý dữ liệu của form
   cartItems: { product: Product, quantity: number }[] = [];
   couponCode: string = ''; // Mã giảm giá
   totalAmount: number = 0; // Tổng tiền
+  subTotalAmount: number = 0;
   cart: Map<number, number> = new Map();
+  couponApplied: boolean = false;
   orderData: OrderDTO = {
     user_id: 0, // Thay bằng user_id thích hợp
     fullname: '', // Khởi tạo rỗng, sẽ được điền từ form
@@ -42,8 +47,9 @@ export class OrderComponent implements OnInit{
     private orderService: OrderService,
     private tokenService: TokenService,
     private formBuilder: FormBuilder,
-    private activatedRoute: ActivatedRoute,
+    private couponService: CouponService,
     private router: Router,
+    private messageService: MessageService
   ) {
     // Tạo FormGroup và các FormControl tương ứng
     this.orderForm = this.formBuilder.group({
@@ -53,26 +59,28 @@ export class OrderComponent implements OnInit{
       address: ['', [Validators.required, Validators.minLength(5)]], // address bắt buộc và ít nhất 5 ký tự
       note: [''],
       shipping_method: ['express'],
-      payment_method: ['cod']
-    });
+      payment_method: ['cod'],
+      coupon_code: [''],
+    })
+      ;
   }
-  
-  ngOnInit(): void {  
+
+  ngOnInit(): void {
     debugger
     //this.cartService.clearCart();
-    this.orderData.user_id = this.tokenService.getUserId();    
+    this.orderData.user_id = this.tokenService.getUserId();
     // Lấy danh sách sản phẩm từ giỏ hàng
     debugger
     this.cart = this.cartService.getCart();
     const productIds = Array.from(this.cart.keys()); // Chuyển danh sách ID từ Map giỏ hàng    
 
     // Gọi service để lấy thông tin sản phẩm dựa trên danh sách ID
-    debugger    
-    if(productIds.length === 0) {
+    debugger
+    if (productIds.length === 0) {
       return;
-    }    
+    }
     this.productService.getProductsByIds(productIds).subscribe({
-      next: (products) => {            
+      next: (products) => {
         debugger
         // Lấy thông tin sản phẩm và số lượng từ danh sách sản phẩm và giỏ hàng
         this.cartItems = productIds.map((productId) => {
@@ -80,7 +88,7 @@ export class OrderComponent implements OnInit{
           const product = products.find((p) => p.id === productId);
           if (product) {
             product.thumbnail = `${environment.apiBaseUrl}/products/images/${product.thumbnail}`;
-          }          
+          }
           return {
             product: product!,
             quantity: this.cart.get(productId)!
@@ -96,7 +104,7 @@ export class OrderComponent implements OnInit{
         debugger;
         console.error('Error fetching detail:', error);
       }
-    });        
+    });
   }
   placeOrder() {
     debugger
@@ -112,6 +120,7 @@ export class OrderComponent implements OnInit{
       this.orderData.payment_method = this.orderForm.get('payment_method')!.value;
       */
       // Sử dụng toán tử spread (...) để sao chép giá trị từ form vào orderData
+      debugger
       this.orderData = {
         ...this.orderData,
         ...this.orderForm.value
@@ -120,14 +129,17 @@ export class OrderComponent implements OnInit{
         product_id: cartItem.product.id,
         quantity: cartItem.quantity
       }));
-      this.orderData.total_money =  this.totalAmount;
+      this.orderData.total_money = this.totalAmount;
       // Dữ liệu hợp lệ, bạn có thể gửi đơn hàng đi
       this.orderService.placeOrder(this.orderData).subscribe({
-        next: (response:Order) => {
-          debugger;          
-          alert('Đặt hàng thành công');
+        next: (response: Order) => {
+          debugger;
+          this.executeToast('success','Đặt hàng thành công');
           this.cartService.clearCart();
-          this.router.navigate(['/']);
+          setTimeout(() => {
+            this.router.navigate(['/']);
+          }, 1000);
+         
         },
         complete: () => {
           debugger;
@@ -141,9 +153,9 @@ export class OrderComponent implements OnInit{
     } else {
       // Hiển thị thông báo lỗi hoặc xử lý khác
       alert('Dữ liệu không hợp lệ. Vui lòng kiểm tra lại.');
-    }        
+    }
   }
-    
+
   decreaseQuantity(index: number): void {
     if (this.cartItems[index].quantity > 1) {
       this.cartItems[index].quantity--;
@@ -152,20 +164,21 @@ export class OrderComponent implements OnInit{
       this.calculateTotal();
     }
   }
-  
+
   increaseQuantity(index: number): void {
-    this.cartItems[index].quantity++;   
+    this.cartItems[index].quantity++;
     // Cập nhật lại this.cart từ this.cartItems
     this.updateCartFromCartItems();
     this.calculateTotal();
-  }    
-  
+  }
+
   // Hàm tính tổng tiền
   calculateTotal(): void {
-      this.totalAmount = this.cartItems.reduce(
-          (total, item) => total + item.product.price * item.quantity,
-          0
-      );
+    this.totalAmount = this.cartItems.reduce(
+      (total, item) => total + item.product.price * item.quantity,
+      0
+    );
+    this.subTotalAmount = this.totalAmount;
   }
   confirmDelete(index: number): void {
     if (confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')) {
@@ -179,8 +192,33 @@ export class OrderComponent implements OnInit{
   }
   // Hàm xử lý việc áp dụng mã giảm giá
   applyCoupon(): void {
-      // Viết mã xử lý áp dụng mã giảm giá ở đây
-      // Cập nhật giá trị totalAmount dựa trên mã giảm giá nếu áp dụng
+    debugger
+    const couponCode = this.orderForm.get('coupon_code')!.value;
+    console.log("code" + couponCode)
+    if (!this.couponApplied && couponCode) {
+      debugger
+      this.couponCode =couponCode;
+      this.calculateTotal();
+      this.couponService.calculateCouponValue(couponCode, this.totalAmount)
+        .subscribe({
+          next: (apiResponse: ApiResponse) => { 
+            this.totalAmount = apiResponse.data.result;
+            this.couponApplied = true;
+          },
+        complete: () => {
+          this.executeToast('success','Áp dụng Coupon thành công')
+          console.log(this.totalAmount)
+          debugger;
+        },
+        error: (error: any) => {
+          this.executeToast('error','Mã giảm giá không hợp lệ');
+          console.log(error);
+        },
+        });
+    }
+    else{
+      this.executeToast('error','Mã giảm giá không được để trống hoặc đã được áp dụng')
+    }
   }
   private updateCartFromCartItems(): void {
     this.cart.clear();
@@ -188,5 +226,8 @@ export class OrderComponent implements OnInit{
       this.cart.set(item.product.id, item.quantity);
     });
     this.cartService.setCart(this.cart);
+  }
+  executeToast(severity:string, message:string) {
+    this.messageService.add({severity:severity, summary: '', detail: message});
   }
 }

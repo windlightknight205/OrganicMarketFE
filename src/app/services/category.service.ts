@@ -25,7 +25,7 @@ export class CategoryService {
   }
   deleteCategory(id: number): Observable<string> {
     debugger
-    return this.http.delete<string>(`${this.apiBaseUrl}/categories/${id}`);
+    return this.http.delete<string>(`${this.apiBaseUrl}/categories/${id}`,{  responseType: 'text' as 'json'});
   }
   updateCategory(id: number, updatedCategory: UpdateCategoryDTO): Observable<UpdateCategoryDTO> {
     debugger

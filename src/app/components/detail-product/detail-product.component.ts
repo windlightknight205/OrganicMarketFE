@@ -192,7 +192,8 @@ export class DetailProductComponent implements OnInit {
     // Điều hướng đến trang detail-product với productId là tham số
     this.router.navigate(['/products', productId]).then(() => {
       // Force reload the current page
-      window.location.reload()
+      window.location.reload();
+      window.scrollTo(0, 0);
     })
   }
 
