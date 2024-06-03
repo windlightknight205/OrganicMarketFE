@@ -11,7 +11,7 @@ import { UserResponse } from '../../responses/user/user.response';
 import { CartService } from '../../services/cart.service';
 @Component({
   selector: 'app-login',
-  templateUrl: './login.component.html',
+  templateUrl: './test.component.html',
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit{
@@ -32,8 +32,8 @@ export class LoginComponent implements OnInit{
   password: string = '11223344';
 
   */
-  phoneNumber: string = '33445566';
-  password: string = '123456789';
+  phoneNumber: string = '';
+  password: string = '';
   showPassword: boolean = false;
 
   roles: Role[] = []; // Mảng roles
