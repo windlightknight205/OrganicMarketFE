@@ -25,7 +25,7 @@
                             <label>Họ và tên<span>*</span></label>
                             <input type="text" formControlName="fullname" class="form-control" id="fullname"
                                 [class.is-invalid]="orderForm.get('fullname')!.invalid && orderForm.get('fullname')!.touched">
-                            <div *ngIf="orderForm.get('fullname')!.invalid && orderForm.get('fullname')!.touched"
+                            <div *ngIf="orderForm.get('fullname')!.hasError('fullname')"
                                 class="invalid-feedback">
                                 Họ và tên là trường bắt buộc.
                             </div>
@@ -45,7 +45,7 @@
                         <div class="col-lg-6">
                             <label>Số điện thoại<span>*</span></label>
                             <input type="text" class="form-control" formControlName="phone_number"
-                                placeholder="Số điện thoại" required id="phone"
+                                placeholder="Số điện thoại" required id="phone" value="{{userRespone?.phone_number}}"
                                 [class.is-invalid]="orderForm.get('phone_number')!.invalid && orderForm.get('phone_number')!.touched">
                             <div *ngIf="orderForm.get('phone_number')!.invalid && orderForm.get('phone_number')!.touched"
                                 class="invalid-feedback">
@@ -55,7 +55,7 @@
                         <div class="col-lg-6">
                             <label>Địa chỉ<span>*</span></label>
                             <input type="text" class="form-control" formControlName="address" placeholder="Địa chỉ"
-                                required id="address"
+                                required id="address" value="{{userRespone?.address}}"
                                 [class.is-invalid]="orderForm.get('address')!.invalid && orderForm.get('address')!.touched">
                             <div *ngIf="orderForm.get('address')!.invalid && orderForm.get('address')!.touched"
                                 class="invalid-feedback">
@@ -94,10 +94,10 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th class="shoping__product">Products</th>
-                                    <th>Price</th>
-                                    <th>Quantity</th>
-                                    <th>Total</th>
+                                    <th class="shoping__product">Sản phẩm</th>
+                                    <th>Đơn giá</th>
+                                    <th>Số lượng</th>
+                                    <th>Tổng</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -135,22 +135,20 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="shoping__cart__btns">
-                        <a href="#" class="primary-btn cart-btn">CONTINUE SHOPPING</a>
-                        <a href="#" class="primary-btn cart-btn cart-btn-right"><span class="icon_loading"></span>
-                            Upadate Cart</a>
+                        <a href="#" class="primary-btn cart-btn">TIẾP TỤC MUA HÀNG</a>
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="shoping__continue">
                         <div class="shoping__discount">
-                            <h5>Discount Codes</h5>
+                            <h5>Mã giảm giá</h5>
                             <div class="row">
                                 <div class="checkout__input">
                                     <input type="text" formControlName="coupon_code" name="couponCode" id="couponCode"
                                         placeholder="Enter your coupon code">
                                 </div>
                                 <div class="checkout__input">
-                                    <button (click)="applyCoupon()" class="site-btn">APPLY COUPON</button>
+                                    <button (click)="applyCoupon()" class="site-btn">ÁP DỤNG MÃ</button>
                                 </div>
                             </div>
                         </div>
@@ -158,10 +156,10 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="shoping__checkout">
-                        <h5>Cart Total</h5>
+                        <h5>Giá trị giỏ hàng</h5>
                         <ul>
-                            <li>Subtotal <span>{{ subTotalAmount | number:'1.0-0'}}<sup>vnđ</sup></span></li>
-                            <li>Total <span>{{ totalAmount| number:'1.0-0'}}<sup>vnđ</sup></span></li>
+                            <li>Tổng tiền <span>{{ subTotalAmount | number:'1.0-0'}}<sup>vnđ</sup></span></li>
+                            <li>Tổng tiền sau cùng <span>{{ totalAmount| number:'1.0-0'}}<sup>vnđ</sup></span></li>
                         </ul>
                         <button class="site-btn" (click)="placeOrder()">Đặt hàng</button>
                     </div>

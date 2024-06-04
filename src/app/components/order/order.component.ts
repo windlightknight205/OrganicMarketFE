@@ -12,6 +12,8 @@ import { Order } from '../../models/order';
 import { ApiResponse } from 'src/app/responses/api.response';
 import { CouponService } from 'src/app/services/coupon.service';
 import { MessageService } from 'primeng/api';
+import { UserResponse } from 'src/app/responses/user/user.response';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-order',
@@ -26,6 +28,7 @@ export class OrderComponent implements OnInit {
   subTotalAmount: number = 0;
   cart: Map<number, number> = new Map();
   couponApplied: boolean = false;
+  userRespone?: UserResponse;
   orderData: OrderDTO = {
     user_id: 0, // Thay bằng user_id thích hợp
     fullname: '', // Khởi tạo rỗng, sẽ được điền từ form
@@ -49,6 +52,8 @@ export class OrderComponent implements OnInit {
     private formBuilder: FormBuilder,
     private couponService: CouponService,
     private router: Router,
+    private token: TokenService,
+    private userService: UserService,
     private messageService: MessageService
   ) {
     // Tạo FormGroup và các FormControl tương ứng
@@ -68,8 +73,17 @@ export class OrderComponent implements OnInit {
   ngOnInit(): void {
     debugger
     //this.cartService.clearCart();
-    this.orderData.user_id = this.tokenService.getUserId();
     // Lấy danh sách sản phẩm từ giỏ hàng
+    this.userService.getUserDetail(this.tokenService.getToken()).subscribe({
+      next: (rs:any)=> {
+        this.orderForm.patchValue({
+          fullname: rs.fullname,
+          email: rs.email,
+          phone_number: rs.phone_number,
+          address: rs.address
+        })
+      }
+    });
     debugger
     this.cart = this.cartService.getCart();
     const productIds = Array.from(this.cart.keys()); // Chuyển danh sách ID từ Map giỏ hàng    

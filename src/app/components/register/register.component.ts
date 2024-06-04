@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ValidationErrors, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { RegisterDTO } from '../../dtos/user/register.dto';
@@ -9,57 +9,72 @@ import { RegisterDTO } from '../../dtos/user/register.dto';
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent {
-  @ViewChild('registerForm') registerForm!: NgForm;
+  registerForm: FormGroup;
   // Khai báo các biến tương ứng với các trường dữ liệu trong form
-  phoneNumber: string;
-  password: string;
-  retypePassword: string;
-  fullName: string;
-  address:string;
-  isAccepted: boolean;
-  dateOfBirth: Date;
   showPassword: boolean = false;
-
-  constructor(private router: Router, private userService: UserService){
-    debugger
-    this.phoneNumber = '';
-    this.password = '';
-    this.retypePassword = '';
-    this.fullName = '';
-    this.address = '';
-    this.isAccepted = true;
-    this.dateOfBirth = new Date();
-    this.dateOfBirth.setFullYear(this.dateOfBirth.getFullYear() - 18);
-    //inject
+  Accepted: boolean = true;
+  isFocused = false;
+  registerDTO: RegisterDTO = {
+    fullname: '',
+    phone_number: '',
+    address: '',
+    password: '',
+    retype_password: '',
+    date_of_birth: new Date(),
+    email: '',
+    facebook_account_id: 0,
+    google_account_id: 0,
+    role_id: 1
+  }
+  constructor(
+    private router: Router,
+    private userService: UserService,
+    private formBuilder: FormBuilder,
+  ) {
+    this.registerForm = this.formBuilder.group(
+      {
+        email: ['', [Validators.email]], // Sử dụng Validators.email cho kiểm tra định dạng email
+        phone_number: ['', [Validators.required, Validators.minLength(6), Validators.pattern(/^[0-9]+$/)]], // phone_number bắt buộc và ít nhất 6 ký tự
+        address: ['', [Validators.required, Validators.minLength(5)]], // address bắt buộc và ít nhất 5 ký tự
+        password: ['', [Validators.required, Validators.minLength(8)]],
+        retype_password: ['', [Validators.required],],
+        fullname: ['', [Validators.required, Validators.minLength(3)]],
+        date_of_birth: ['', [Validators.required]]
+      }, { validators: this.matchPasswords });
 
   }
-  onPhoneNumberChange(){
-    console.log(`Phone typed: ${this.phoneNumber}`)
-    //how to validate ? phone must be at least 6 characters
+  matchPasswords(control: AbstractControl): ValidationErrors | null {
+    const password = control.get('password')?.value;
+    const retypePassword = control.get('retype_password')?.value;
+    if (password !== retypePassword) {
+      return { passwordMismatch: true };
+    }
+    return null;
+  }
+  get email() { return this.registerForm.get('email'); }
+  get phoneNumber() { return this.registerForm.get('phone_number'); }
+  get address() { return this.registerForm.get('address'); }
+  get password() { return this.registerForm.get('password'); }
+  get retypePassword() { return this.registerForm.get('retype_password'); }
+  get fullname() { return this.registerForm.get('fullname'); }
+  get dateOfBirth() { return this.registerForm.get('dateOfBirth'); }
+
+  onFocus() {
+    this.isFocused = true;
+  }
+
+  onBlur() {
+    this.isFocused = false;
   }
   register() {
-    const message = `phone: ${this.phoneNumber}`+
-                    `password: ${this.password}`+
-                    `retypePassword: ${this.retypePassword}`+
-                    `address: ${this.address}`+
-                    `fullName: ${this.fullName}`+
-                    `isAccepted: ${this.isAccepted}`+
-                    `dateOfBirth: ${this.dateOfBirth}`;
     //alert(message);
     debugger
-    
-    const registerDTO:RegisterDTO = {
-        "fullname": this.fullName,
-        "phone_number": this.phoneNumber,
-        "address": this.address,
-        "password": this.password,
-        "retype_password": this.retypePassword,
-        "date_of_birth": this.dateOfBirth,
-        "facebook_account_id": 0,
-        "google_account_id": 0,
-        "role_id": 1
-    }
-    this.userService.register(registerDTO).subscribe({
+    if (this.registerForm.errors == null) {
+      this.registerDTO = {
+        ...this.registerDTO,
+        ...this.registerForm.value
+      }
+      this.userService.register(this.registerDTO).subscribe({
         next: (response: any) => {
           debugger
           const confirmation = window
@@ -71,28 +86,24 @@ export class RegisterComponent {
         complete: () => {
           debugger
         },
-        error: (error: any) => {        
-          debugger  
-          alert(error?.error?.message ?? '')          
+        error: (error: any) => {
+          debugger
+          alert(error?.error?.message ?? '')
         }
-    })   
+      })
+    }
   }
   togglePassword() {
     this.showPassword = !this.showPassword;
   }
   //how to check password match ?
-  checkPasswordsMatch() {    
-    if (this.password !== this.retypePassword) {
-      this.registerForm.form.controls['retypePassword']
-            .setErrors({ 'passwordMismatch': true });
-    } else {
-      this.registerForm.form.controls['retypePassword'].setErrors(null);
-    }
+  isAccepted() {
+    this.Accepted = !this.Accepted
   }
   checkAge() {
-    if (this.dateOfBirth) {
+    if (this.registerForm.get('dateOfBirth')?.value) {
       const today = new Date();
-      const birthDate = new Date(this.dateOfBirth);
+      const birthDate = new Date(this.registerForm.get('dateOfBirth')?.value);
       let age = today.getFullYear() - birthDate.getFullYear();
       const monthDiff = today.getMonth() - birthDate.getMonth();
       if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
@@ -100,9 +111,9 @@ export class RegisterComponent {
       }
 
       if (age < 18) {
-        this.registerForm.form.controls['dateOfBirth'].setErrors({ 'invalidAge': true });
+        this.registerForm.controls['dateOfBirth'].setErrors({ 'invalidAge': true });
       } else {
-        this.registerForm.form.controls['dateOfBirth'].setErrors(null);
+        this.registerForm.controls['dateOfBirth'].setErrors(null);
       }
     }
   }
