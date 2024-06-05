@@ -29,7 +29,7 @@ import { FavouriteComponent } from './components/favourite/favourite..component'
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CommentService } from './services/comment.service';
+import { PaymentComponent } from './components/payment/payment.component';
 
 
 @NgModule({
@@ -49,6 +49,7 @@ import { CommentService } from './services/comment.service';
     HistoryComponent,
     BlogComponent,
     FavouriteComponent,
+    PaymentComponent
     //admin    
     //AdminComponent,
     //OrderAdminComponent,

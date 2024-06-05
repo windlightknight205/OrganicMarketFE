@@ -1,4 +1,5 @@
 <app-header></app-header>
+<p-toast position="center"></p-toast>
 <section class="product spad">
     <div class="container">
         <div class="row">
@@ -66,9 +67,9 @@
                                 <img [src]="product.url" (click)="onProductClick(product.id)" alt="Product Image"
                                     class="product-image">
                                 <ul class="featured__item__pic__hover">
-                                    <li><a><i class="fa fa-heart"></i></a></li>
-                                    <li><a (click)="addToCart(product.id)"><i class="fa fa-shopping-cart"></i></a></li>
-                                    <li><a (click)="buyNow(product.id)"><i class="fas fa-shopping-bag"></i></a></li>
+                                    <li><a (click)="addToFavourite(product.id)" title="Thêm vào yêu thích"><i class="fa fa-heart"></i></a></li>
+                                    <li><a (click)="addToCart(product.id)" title="Thêm vào giỏ hàng"><i class="fa fa-shopping-cart"></i></a></li>
+                                    <li><a (click)="buyNow(product.id)" title="Mua ngay"><i class="fas fa-shopping-bag"></i></a></li>
                                 </ul>
                             </div>
                             <div class="featured__item__text">

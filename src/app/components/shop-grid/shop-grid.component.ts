@@ -6,6 +6,8 @@ import { Product } from '../../models/product';
 import { Category } from '../../models/category';
 import { environment } from '../../../environments/environment';
 import { CartService } from 'src/app/services/cart.service';
+import { MessageService } from 'primeng/api';
+import { TokenService } from 'src/app/services/token.service';
 
 @Component({
   selector: 'app-shop-grid',
@@ -28,7 +30,9 @@ export class ShopGridComponent {
     private productService: ProductService,
     private categoryService: CategoryService,    
     private router: Router,
-    private cartService: CartService
+    private cartService: CartService,
+    private messageService: MessageService,
+    private tokenService: TokenService
     ) {}
 
     ngOnInit() {
@@ -118,10 +122,32 @@ export class ShopGridComponent {
       debugger
       this.isPressedAddToCart = true;
       this.cartService.addToCart(productId, 1);
+      this.executeToast('Thêm vào giỏ hàng thành công')
     }
   
     buyNow(productId:number): void {
       this.cartService.addToCart(productId, 1);
       this.router.navigate(['/orders']);
+    }
+    addToFavourite(productId:number){
+      const userId = this.tokenService.getUserId();
+      this.productService.addFavourite(productId,userId).subscribe({
+        next: (response: any) => {
+          debugger;
+          console.log(response);
+        },
+        complete: () => {
+          this.executeToast('Đã thêm vào yêu thích')
+          debugger;
+        },
+        error: (error: any) => {
+          debugger;
+          console.error('Error fetching products:', error);
+        }
+      });
+    }
+
+    executeToast(message:string) {
+      this.messageService.add({severity:'success', summary: '', detail: message});
     }
 }

@@ -14,11 +14,13 @@ import { CouponService } from 'src/app/services/coupon.service';
 import { MessageService } from 'primeng/api';
 import { UserResponse } from 'src/app/responses/user/user.response';
 import { UserService } from 'src/app/services/user.service';
+import { VnPayService } from 'src/app/services/vnpay.service';
 
 @Component({
   selector: 'app-order',
   templateUrl: './order.component.html',
-  styleUrls: ['./order.component.scss']
+  styleUrls: ['./order.component.scss'],
+  providers: [VnPayService]
 })
 export class OrderComponent implements OnInit {
   orderForm: FormGroup; // Đối tượng FormGroup để quản lý dữ liệu của form
@@ -52,8 +54,8 @@ export class OrderComponent implements OnInit {
     private formBuilder: FormBuilder,
     private couponService: CouponService,
     private router: Router,
-    private token: TokenService,
     private userService: UserService,
+    private vnPayService: VnPayService,
     private messageService: MessageService
   ) {
     // Tạo FormGroup và các FormControl tương ứng
@@ -75,7 +77,7 @@ export class OrderComponent implements OnInit {
     //this.cartService.clearCart();
     // Lấy danh sách sản phẩm từ giỏ hàng
     this.userService.getUserDetail(this.tokenService.getToken()).subscribe({
-      next: (rs:any)=> {
+      next: (rs: any) => {
         this.orderForm.patchValue({
           fullname: rs.fullname,
           email: rs.email,
@@ -123,17 +125,6 @@ export class OrderComponent implements OnInit {
   placeOrder() {
     debugger
     if (this.orderForm.errors == null) {
-      // Gán giá trị từ form vào đối tượng orderData
-      /*
-      this.orderData.fullname = this.orderForm.get('fullname')!.value;
-      this.orderData.email = this.orderForm.get('email')!.value;
-      this.orderData.phone_number = this.orderForm.get('phone_number')!.value;
-      this.orderData.address = this.orderForm.get('address')!.value;
-      this.orderData.note = this.orderForm.get('note')!.value;
-      this.orderData.shipping_method = this.orderForm.get('shipping_method')!.value;
-      this.orderData.payment_method = this.orderForm.get('payment_method')!.value;
-      */
-      // Sử dụng toán tử spread (...) để sao chép giá trị từ form vào orderData
       debugger
       this.orderData = {
         ...this.orderData,
@@ -143,27 +134,46 @@ export class OrderComponent implements OnInit {
         product_id: cartItem.product.id,
         quantity: cartItem.quantity
       }));
+      this.orderData.user_id = this.tokenService.getUserId();
       this.orderData.total_money = this.totalAmount;
+      const orderDataString = JSON.stringify(this.orderData);
+      sessionStorage.setItem('orderData', orderDataString);
+      if (this.orderData.payment_method === 'other') {
+        debugger
+        this.vnPayService.payByVnpay(this.orderData.total_money, this.orderData.fullname + ' thanh toán đơn hàng')
+          .subscribe({
+            next: (rs) => {
+              debugger
+              window.location.href = rs;
+            },
+            error: (e) => {
+              debugger
+              console.log(e);
+            }
+          })
+      }
+      else {
+        this.orderService.placeOrder(this.orderData).subscribe({
+          next: (response: Order) => {
+            debugger;
+            this.executeToast('success', 'Đặt hàng thành công');
+            this.cartService.clearCart();
+            setTimeout(() => {
+              this.router.navigate(['/']);
+            }, 1000);
+
+          },
+          complete: () => {
+            debugger;
+            this.calculateTotal();
+          },
+          error: (error: any) => {
+            debugger;
+            alert(`Lỗi khi đặt hàng: ${error}`);
+          },
+        });
+      }
       // Dữ liệu hợp lệ, bạn có thể gửi đơn hàng đi
-      this.orderService.placeOrder(this.orderData).subscribe({
-        next: (response: Order) => {
-          debugger;
-          this.executeToast('success','Đặt hàng thành công');
-          this.cartService.clearCart();
-          setTimeout(() => {
-            this.router.navigate(['/']);
-          }, 1000);
-         
-        },
-        complete: () => {
-          debugger;
-          this.calculateTotal();
-        },
-        error: (error: any) => {
-          debugger;
-          alert(`Lỗi khi đặt hàng: ${error}`);
-        },
-      });
     } else {
       // Hiển thị thông báo lỗi hoặc xử lý khác
       alert('Dữ liệu không hợp lệ. Vui lòng kiểm tra lại.');
@@ -211,27 +221,27 @@ export class OrderComponent implements OnInit {
     console.log("code" + couponCode)
     if (!this.couponApplied && couponCode) {
       debugger
-      this.couponCode =couponCode;
+      this.couponCode = couponCode;
       this.calculateTotal();
       this.couponService.calculateCouponValue(couponCode, this.totalAmount)
         .subscribe({
-          next: (apiResponse: ApiResponse) => { 
+          next: (apiResponse: ApiResponse) => {
             this.totalAmount = apiResponse.data.result;
             this.couponApplied = true;
           },
-        complete: () => {
-          this.executeToast('success','Áp dụng Coupon thành công')
-          console.log(this.totalAmount)
-          debugger;
-        },
-        error: (error: any) => {
-          this.executeToast('error','Mã giảm giá không hợp lệ');
-          console.log(error);
-        },
+          complete: () => {
+            this.executeToast('success', 'Áp dụng Coupon thành công')
+            console.log(this.totalAmount)
+            debugger;
+          },
+          error: (error: any) => {
+            this.executeToast('error', 'Mã giảm giá không hợp lệ');
+            console.log(error);
+          },
         });
     }
-    else{
-      this.executeToast('error','Mã giảm giá không được để trống hoặc đã được áp dụng')
+    else {
+      this.executeToast('error', 'Mã giảm giá không được để trống hoặc đã được áp dụng')
     }
   }
   private updateCartFromCartItems(): void {
@@ -241,7 +251,7 @@ export class OrderComponent implements OnInit {
     });
     this.cartService.setCart(this.cart);
   }
-  executeToast(severity:string, message:string) {
-    this.messageService.add({severity:severity, summary: '', detail: message});
+  executeToast(severity: string, message: string) {
+    this.messageService.add({ severity: severity, summary: '', detail: message });
   }
 }
