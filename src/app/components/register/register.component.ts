@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators, ValidationErrors, AbstractControl }
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { RegisterDTO } from '../../dtos/user/register.dto';
+import { MessageService } from 'primeng/api';
+import { timeout } from 'rxjs';
 @Component({
   selector: 'app-register',
   templateUrl: './test.component.html',
@@ -30,6 +32,7 @@ export class RegisterComponent {
     private router: Router,
     private userService: UserService,
     private formBuilder: FormBuilder,
+    private messageService: MessageService
   ) {
     this.registerForm = this.formBuilder.group(
       {
@@ -77,18 +80,23 @@ export class RegisterComponent {
       this.userService.register(this.registerDTO).subscribe({
         next: (response: any) => {
           debugger
-          const confirmation = window
-            .confirm('Đăng ký thành công, mời bạn đăng nhập. Bấm "OK" để chuyển đến trang đăng nhập.');
-          if (confirmation) {
+          // const confirmation = window
+          //   .confirm('Đăng ký thành công, mời bạn đăng nhập. Bấm "OK" để chuyển đến trang đăng nhập.');
+          // if (confirmation) {
+          //   this.router.navigate(['/login']);
+          // }
+          this.executeToast('Đăng ký thành công, hệ thống sẽ chuyển hướng đến trang đăng nhập','success');
+          setTimeout(() => {
             this.router.navigate(['/login']);
-          }
+          }, 1000);
         },
         complete: () => {
           debugger
         },
         error: (error: any) => {
           debugger
-          alert(error?.error?.message ?? '')
+          this.executeToast(error?.error?.message ?? '','error')
+          // alert(error?.error?.message ?? '')
         }
       })
     }
@@ -116,6 +124,10 @@ export class RegisterComponent {
         this.registerForm.controls['dateOfBirth'].setErrors(null);
       }
     }
+  }
+
+  executeToast(message:string, severity: string) {
+    this.messageService.add({severity:severity, summary: '', detail: message});
   }
 }
 

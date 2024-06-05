@@ -8,6 +8,7 @@ import { HttpUtilService } from './http.util.service';
 import { UserResponse } from '../responses/user/user.response';
 import { UpdateUserDTO } from '../dtos/user/update.user.dto';
 import { ApiResponse } from '../responses/api.response';
+import { ResetUser } from '../dtos/user/reset.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -97,8 +98,13 @@ export class UserService {
     return this.http.get<ApiResponse>(url, { params: params });
   }
   resetPassword(userId: number): Observable<ApiResponse> {
+    debugger
     const url = `${environment.apiBaseUrl}/users/reset-password/${userId}`;
     return this.http.put<ApiResponse>(url, null, this.apiConfig);
+  }
+  sendEmail(user:ResetUser, email: string): Observable<any>{
+    debugger
+    return this.http.post(`${environment.apiBaseUrl}/send/${email}`, user,this.apiConfig);
   }
 
   toggleUserStatus(params: { userId: number, enable: boolean }): Observable<ApiResponse> {

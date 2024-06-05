@@ -51,4 +51,12 @@ export class OrderService {
     const url = `${environment.apiBaseUrl}/orders/${orderId}`;
     return this.http.delete(url, { responseType: 'text' });
   }
+  payByVnpay(amount: number, orderInfo: string): Observable<any> {
+    debugger
+    const params = {
+        amount: amount,
+        orderInfo: orderInfo
+    };
+    return this.http.post(`${this.apiUrl}/vnpay`, { params });
+}
 }
