@@ -13,7 +13,7 @@ import { UserProfileComponent } from './components/user-profile/user.profile.com
 import { AdminComponent } from './components/admin/admin.component';
 import { AuthGuardFn } from './guards/auth.guard';
 import { AdminGuardFn } from './guards/admin.guard';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
 import { ShopGridComponent } from './components/shop-grid/shop-grid.component';
 import { HistoryComponent } from './components/history/history.component';
 import { BlogComponent } from './components/blog/blog.component';
@@ -29,7 +29,6 @@ const routes: Routes = [
   { path: 'orders', component: OrderComponent, canActivate: [AuthGuardFn] },
   { path: 'user-profile', component: UserProfileComponent, canActivate: [AuthGuardFn] },
   { path: 'orders/:id', component: OrderDetailComponent },
-  { path: 'dashboard', component: DashboardComponent },
   { path: 'shop-grid', component: ShopGridComponent },
   { path: 'history', component: HistoryComponent },
   { path: 'order-detail/:id', component: OrderDetailComponent },

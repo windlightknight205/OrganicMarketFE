@@ -26,6 +26,8 @@
     "@ng-bootstrap/ng-bootstrap": "^15.1.1",
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.0",
+    "chart.js": "^4.4.3",
+    "chat.js": "^1.0.2",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
     "dotenv": "^16.3.1",

@@ -9,9 +9,10 @@ import { LoginResponse } from '../../responses/user/login.response';
 import { Role } from '../../models/role'; // Đường dẫn đến model Role
 import { UserResponse } from '../../responses/user/user.response';
 import { CartService } from '../../services/cart.service';
+import { MessageService } from 'primeng/api';
 @Component({
   selector: 'app-login',
-  templateUrl: './test.component.html',
+  templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit{
@@ -47,11 +48,11 @@ export class LoginComponent implements OnInit{
   }
   constructor(
     private router: Router,
-    private activatedRoute: ActivatedRoute,
     private userService: UserService,
     private tokenService: TokenService,
     private roleService: RoleService,
-    private cartService: CartService
+    private cartService: CartService,
+    private messageService: MessageService
   ) { }
 
   ngOnInit() {
@@ -132,5 +133,13 @@ export class LoginComponent implements OnInit{
   }
   togglePassword() {
     this.showPassword = !this.showPassword;
+  }
+  
+  forgotPassword(){
+    this.executeToast('Vui lòng xác minh thông tin với admin qua nhóm để được lấy lại mật khẩu qua email')
+  }
+
+  executeToast(message:string) {
+    this.messageService.add({severity:'success', summary: '', detail: message});
   }
 }

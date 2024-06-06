@@ -59,4 +59,12 @@ export class OrderService {
     };
     return this.http.post(`${this.apiUrl}/vnpay`, { params });
 }
+  getRevenue(year: number): Observable<any[]>{
+    return this.http.get<any[]>(`${this.apiUrl}/revenue/${year}`)
+  }
+
+  getDailyRevenue(month: number, year:number): Observable<any[]>{
+    debugger
+    return this.http.get<any[]>(`${this.apiUrl}/revenue-daily/${month}/${year}`)
+  }
 }

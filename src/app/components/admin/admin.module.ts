@@ -23,6 +23,7 @@ import { MessageService } from 'primeng/api';
 import { CouponAdminComponent } from './coupon/coupon.admin.component';
 import { DetailCouponAdminComponent } from './coupon/detail-coupon/detail.coupon.admin.component';
 import { InsertCouponAdminComponent } from './coupon/insert/insert.coupon.admin.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { InsertCouponAdminComponent } from './coupon/insert/insert.coupon.admin.
     CategoryAdminComponent,
     UserAdminComponent,
     CouponAdminComponent,
+    DashboardComponent,
     //sub-components
     DetailCouponAdminComponent,
     DetailOrderAdminComponent,

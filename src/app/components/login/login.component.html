@@ -1,65 +1,108 @@
-<app-header></app-header>
-<div class="container">
-    <div class="row">
-        <div class="col-md-6 offset-md-3">
-            <div class="login-form mx-auto">
-                <h2 class="login-header">Đăng nhập</h2>
-                <div class="form-group">
-                    <label for="phoneNumber">Phone</label>
-                    <input type="text" class="form-control" 
-                        [(ngModel)]="phoneNumber"
-                            (input)="onPhoneNumberChange()"
-                            name="phone"
-                            (focus)="loginForm.form.markAsTouched()"
-                    id="phoneNumber">
-                    <div class="divider-nospace"></div>
-                </div>
-                <div class="mt-5"></div>
-                <div class="form-group password-field">
-                    <label for="password">Mật khẩu</label>
-                    <input type="{{ showPassword ? 'text' : 'password' }}"
-                        [(ngModel)]="password"                            
-                        name="password"
-                        placeholder="Ít nhất 3 ký tự" 
-                        class="form-control" id="password">
-                    <i class="password-toggle fas" [ngClass]="showPassword ? 
-                        'fa-eye' : 'fa-eye-slash'" (click)="togglePassword()"></i>
-                    <div class="divider-nospace"></div>
-                </div>                
-                <div class="form-group">
-                    <div class="form-check checkbox-text">
-                      <span style="display: flex;">
-                        <input type="checkbox" 
-                            class="form-check-input" 
-                            id="remember" 
-                            [(ngModel)]="rememberMe">
-                        <label class="form-check-label text-start" for="remember">
-                          Ghi nhớ đăng nhập</label>
-                      </span>
-                      <a href="#" class="register-link">Quên mật khẩu</a>
+<p-toast position="center"></p-toast>
+<section class="vh-100">
+    <div class="container-fluid h-custom">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-md-9 col-lg-6 col-xl-5">
+                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
+                    class="img-fluid" alt="Sample image">
+            </div>
+            <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+                <form (ngSubmit)="login()">
+                    <div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
+                        <p class="lead fw-normal mb-0 me-3">Sign in with</p>
+                        <button type="button" data-mdb-button-init data-mdb-ripple-init
+                            class="btn btn-primary btn-floating mx-1">
+                            <i class="fab fa-facebook-f"></i>
+                        </button>
+
+                        <button type="button" data-mdb-button-init data-mdb-ripple-init
+                            class="btn btn-primary btn-floating mx-1">
+                            <i class="fab fa-twitter"></i>
+                        </button>
+
+                        <button type="button" data-mdb-button-init data-mdb-ripple-init
+                            class="btn btn-primary btn-floating mx-1">
+                            <i class="fab fa-linkedin-in"></i>
+                        </button>
                     </div>
-                  </div>
-                  
-                <div class="form-group">
-                    <select class="form-control access-right"
-                        [(ngModel)]="selectedRole">
-                        <option selected disabled>Quyền đăng nhập</option>
-                        <option *ngFor="let role of roles" [ngValue]="role">
-                            {{ role.name }}
-                        </option>
-                    </select>
-                  </div>
-                  
-                  <button 
-                    type="button" 
-                    (click)="login()"
-                    class="login-button">Đăng nhập</button>
-                  <div class="divider"></div>
-                  <p class="text-center">Bạn chưa đăng ký? <span>
-                    <a class="register-link" 
-                       href="/register">Tạo tài khoản</a>
-                </span></p>                                                     
-        
-    </div>   
-</div>
-<app-footer></app-footer>
+
+                    <div class="divider d-flex align-items-center my-4">
+                        <p class="text-center fw-bold mx-3 mb-0">Or</p>
+                    </div>
+
+                    <!-- Email input -->
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <input type="text" class="form-control form-control-lg" [(ngModel)]="phoneNumber"
+                            (input)="onPhoneNumberChange()" name="phone" (focus)="loginForm.form.markAsTouched()"
+                            id="form3Example3" placeholder="Nhập vào số điện thoại">
+                        <label class="form-label" for="form3Example3">Số điện thoại</label>
+                    </div>
+
+                    <!-- Password input -->
+                    <div data-mdb-input-init class="form-outline mb-3">
+                        <input type="{{ showPassword ? 'text' : 'password' }}" [(ngModel)]="password" name="password"
+                            placeholder="Nhập vào mật khẩu" class="form-control form-control-lg" id="form3Example4">
+                        <div class="divider-nospace"></div>
+                        <label class="form-label" for="form3Example4">Mật khẩu</label>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <!-- Checkbox -->
+                        <div>
+                            <select class="form-control access-right" [(ngModel)]="selectedRole" name="Quyền đăng nhập">
+                                <option selected disabled>Quyền đăng nhập</option>
+                                <option *ngFor="let role of roles" [ngValue]="role">
+                                    {{ role.name }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-check mb-0">
+                            <input type="checkbox" class="form-check-input me-2" id="form2Example3"
+                                [(ngModel)]="rememberMe">
+                            <label class="form-check-label" for="form2Example3">
+                                Remember me
+                            </label>
+                        </div>
+                        <label for=""><i class="password-toggle fas" [ngClass]="showPassword ? 
+                'fa-eye' : 'fa-eye-slash'" (click)="togglePassword()"></i></label>
+                        <a (click)="forgotPassword()" class="text-body" style="cursor: pointer;">Quên mật khẩu</a>
+                    </div>
+
+                    <div class="text-center text-lg-start mt-4 pt-2">
+                        <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg"
+                            style="padding-left: 2.5rem; padding-right: 2.5rem;">Đăng nhập</button>
+                        <p class="small fw-bold mt-2 pt-1 mb-0">Bạn chưa có tài khoản?
+                            <a href="/register" class="link-danger">Đăng ký</a>
+                        </p>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+    <div
+        class="d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5 bg-primary">
+        <!-- Copyright -->
+        <div class="text-white mb-3 mb-md-0">
+            Copyright © 2020. All rights reserved.
+        </div>
+        <!-- Copyright -->
+
+        <!-- Right -->
+        <div>
+            <a href="#!" class="text-white me-4">
+                <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="#!" class="text-white me-4">
+                <i class="fab fa-twitter"></i>
+            </a>
+            <a href="#!" class="text-white me-4">
+                <i class="fab fa-google"></i>
+            </a>
+            <a href="#!" class="text-white">
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+        </div>
+        <!-- Right -->
+    </div>
+</section>

@@ -14,12 +14,17 @@ import { UserAdminComponent } from "./user/user.admin.component";
 import { CouponAdminComponent } from "./coupon/coupon.admin.component";
 import { DetailCouponAdminComponent } from "./coupon/detail-coupon/detail.coupon.admin.component";
 import { InsertCouponAdminComponent } from "./coupon/insert/insert.coupon.admin.component";
+import { DashboardComponent } from "./dashboard/dashboard.component";
 
 const routes: Routes = [
     {
         path: 'admin',
         component: AdminComponent,
         children: [
+            {
+                path: 'dashboard',
+                component: DashboardComponent
+            },
             {
                 path: 'orders',
                 component: OrderAdminComponent

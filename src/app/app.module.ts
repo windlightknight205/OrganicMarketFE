@@ -21,7 +21,6 @@ import {
   HttpClientModule, 
   HTTP_INTERCEPTORS 
 } from '@angular/common/http';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ShopGridComponent } from './components/shop-grid/shop-grid.component';
 import { HistoryComponent } from './components/history/history.component';
 import { BlogComponent } from './components/blog/blog.component';
@@ -36,7 +35,6 @@ import { PaymentComponent } from './components/payment/payment.component';
   declarations: [    
     HomeComponent, 
     HeaderComponent,
-    DashboardComponent,
     FooterComponent, 
     DetailProductComponent, 
     OrderComponent, 

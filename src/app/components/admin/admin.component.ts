@@ -25,7 +25,7 @@ export class AdminComponent implements OnInit {
     // Default router
     debugger
     if (this.router.url === '/admin') {
-      this.router.navigate(['/admin/orders']);
+      this.router.navigate(['/admin/dashboard']);
     }
   }
   logout() {
@@ -43,7 +43,9 @@ export class AdminComponent implements OnInit {
       this.router.navigate(['/admin/products']);
     } else if (componentName === 'coupon') {
       this.router.navigate(['/admin/coupon']);
-    }
+    } else if (componentName === 'dashboard') {
+      this.router.navigate(['/admin/dashboard']);
+    } 
   }
 }
 

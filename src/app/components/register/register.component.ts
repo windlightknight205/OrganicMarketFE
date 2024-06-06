@@ -7,7 +7,7 @@ import { MessageService } from 'primeng/api';
 import { timeout } from 'rxjs';
 @Component({
   selector: 'app-register',
-  templateUrl: './test.component.html',
+  templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent {

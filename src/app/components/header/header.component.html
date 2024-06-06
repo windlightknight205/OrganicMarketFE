@@ -40,20 +40,19 @@
         <div class="row">
             <div class="col-lg-3">
                 <div class="header__logo">
-                    <a href="./index.html"><img src="assets/img/logo.png" alt=""></a>
+                    <a href="./"><img src="assets/img/logo.png" alt=""></a>
                 </div>
             </div>
             <div class="col-lg-6">
                 <nav class="header__menu">
                     <ul>
-                        <li><a href="./index.html">Home</a></li>
+                        <li><a href="./">Home</a></li>
                         <li><a href="./shop-grid">Sản phẩm</a></li>
                         <li><a href="#">Page</a>
                             <ul class="header__menu__dropdown">
                                 <li><a *ngIf="userResponse" (click)="handleItemClick(0)">Tài khoản</a></li>
                                 <li><a *ngIf="userResponse" (click)="handleItemClick(1)">Đơn mua</a></li>
                                 <li><a *ngIf="userResponse" (click)="handleItemClick(2)">Đăng xuất</a></li>
-                                <li><a href="./blog-details.html">Blog Details</a></li>
                             </ul>
                         </li>
                         <li><a href="./blog">Blog</a></li>
