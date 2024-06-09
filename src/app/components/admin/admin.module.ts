@@ -24,6 +24,7 @@ import { CouponAdminComponent } from './coupon/coupon.admin.component';
 import { DetailCouponAdminComponent } from './coupon/detail-coupon/detail.coupon.admin.component';
 import { InsertCouponAdminComponent } from './coupon/insert/insert.coupon.admin.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { NgxPrintModule } from 'ngx-print';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     FormsModule,
     ToastModule,
     BrowserModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    NgxPrintModule
   ],
   providers:
     [MessageService],

@@ -3,6 +3,7 @@ import { Category } from '../../../../models/category';
 import { CategoryService } from '../../../../services/category.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UpdateCategoryDTO } from '../../../../dtos/category/update.category.dto';
+import { MessageService } from 'primeng/api';
 
 
 @Component({
@@ -19,6 +20,7 @@ export class UpdateCategoryAdminComponent implements OnInit {
     private categoryService: CategoryService,
     private route: ActivatedRoute,
     private router: Router,
+    private messageService: MessageService
   
   ) {
     this.categoryId = 0;    
@@ -33,6 +35,10 @@ export class UpdateCategoryAdminComponent implements OnInit {
       // console.log(this.categoryId);
     });
     
+  }
+
+  executeToast(severity: string, message: string) {
+    this.messageService.add({ severity: severity, summary: '', detail: message });
   }
   
   getCategoryDetails(): void {
@@ -61,7 +67,11 @@ export class UpdateCategoryAdminComponent implements OnInit {
       },
       complete: () => {
         debugger;
-        this.router.navigate(['/admin/categories']);      
+        this.executeToast('success','Cập nhật danh mục thành công');
+        setTimeout(() => {
+          this.router.navigate(['/admin/categories']);
+        }, 1000);
+              
       },
       error: (error: any) => {
         debugger;

@@ -19,6 +19,7 @@ import { HistoryComponent } from './components/history/history.component';
 import { BlogComponent } from './components/blog/blog.component';
 import { FavouriteComponent } from './components/favourite/favourite..component';
 import { PaymentComponent } from './components/payment/payment.component';
+import { ContactComponent } from './components/contact/contact.component';
 //import { OrderAdminComponent } from './components/admin/order/order.admin.component';
 
 const routes: Routes = [
@@ -35,6 +36,7 @@ const routes: Routes = [
   { path: 'blog', component: BlogComponent },
   { path: 'favourite', component: FavouriteComponent },
   { path: 'payment', component: PaymentComponent },
+  { path: 'contact', component: ContactComponent },
   //Admin   
   {
     path: 'admin',

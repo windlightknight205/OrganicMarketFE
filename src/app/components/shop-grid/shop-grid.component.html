@@ -16,7 +16,7 @@
                                 </select>
                             </div>
                             <input type="text" [(ngModel)]="keyword" name="name" placeholder="Nhập tên sản phẩm">
-                            <button type="submit" class="site-btn">SEARCH</button>
+                            <button type="submit" class="site-btn">Tìm kiếm</button>
                         </form>
                     </div>
                     <div class="hero__search__phone">
@@ -25,41 +25,46 @@
                         </div>
                         <div class="hero__search__phone__text">
                             <h5>+65 11.188.888</h5>
-                            <span>support 24/7 time</span>
+                            <span>Hỗ trợ 24/7</span>
                         </div>
                     </div>
                 </div>
                 <div class="featured__controls">
                     <ul>
-                        <li *ngFor="let category of categories" (click)="searchProductsWithCat(category.id)">
-                            {{category.name}}
+                        <li (click)="setActiveCategory(0)" [class.active]="0 === activeCategory"><span (click)="searchProductsWithCat('')" >Tất cả</span></li>
+                        <li *ngFor="let category of categories" [class.active]="category.id === activeCategory"
+                            (click)="searchProductsWithCat(category.id);setActiveCategory(category.id)">
+                            <span>{{category.name}}</span>
                         </li>
                     </ul>
                 </div>
-                <!-- <div class="filter__item">
+                <div class="filter__item">
                     <div class="row">
                         <div class="col-lg-4 col-md-5">
                             <div class="filter__sort">
-                                <span>Sort By</span>
-                                <select>
+                                <span><label class="label">Sắp xếp theo</label></span>
+                                <select [(ngModel)]="selectedSortItem"
+                                    (ngModelChange)="searchSortedProducts(selectedSortItem)">
                                     <option value="0">Default</option>
-                                    <option value="0">Default</option>
+                                    <option *ngFor="let item of sortItems" [value]="item.value">
+                                        {{ item.label| titlecase }}
+                                    </option>
                                 </select>
                             </div>
                         </div>
-                        <div class="col-lg-4 col-md-4">
-                            <div class="filter__found">
-                                <h6><span>16</span> Products found</h6>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-3">
-                            <div class="filter__option">
-                                <span class="icon_grid-2x2"></span>
-                                <span class="icon_ul"></span>
+                        <div class="col-lg-8 ">
+                            <div class="filter__sort">
+                                <label class="label" for="minPrice">Giá tối thiểu</label>
+                                <input type="text" id="minPrice" name="minPrice" [(ngModel)]="minPrice" class="price"
+                                    separator>
+                                <label class="label" for="maxPrice">Giá tối đa</label>
+                                <input type="text" id="maxPrice" name="maxPrice" class="price"
+                                    [(ngModel)]="maxPrice" separator>
+                                <button (click)="searchProductsByPrice()">Lọc</button>
                             </div>
                         </div>
                     </div>
-                </div> -->
+                </div>
                 <div class="row featured__filter">
                     <div class="col-lg-3 col-md-4 col-sm-6 mix oranges fresh-meat" *ngFor="let product of products">
                         <div class="featured__item">

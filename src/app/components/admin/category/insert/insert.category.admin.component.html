@@ -1,16 +1,19 @@
+<p-toast position="center"></p-toast>
 <div class="container">
     <div class="row">
       <div class="col-md-6 offset-md-3">
-        <h3>Insert Category</h3>
+        <h3>Thêm danh mục</h3>
         <div class="row mb-3">
-          <form (ngSubmit)="insertCategory()">
+          <form (ngSubmit)="insertCategory()" #categoryForm="ngForm">
             <div class="form-group mb-3">
-              <label for="name">Name:</label>
-              <input type="text" id="name" [(ngModel)]="insertCategoryDTO.name" 
-              name="name" class="form-control" required>
-            </div>              
-            <button type="submit" class="btn btn-primary">Insert</button>
-          </form>
+              <label for="name">Tên:</label>
+              <input type="text" id="name" [(ngModel)]="insertCategoryDTO.name" name="name" class="form-control" required #name="ngModel">
+              <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
+                <div *ngIf="name.errors?.['required']">Tên không được để trống.</div>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary" [disabled]="categoryForm.invalid">Thêm</button>
+          </form>          
         </div>        
       </div>
     </div>

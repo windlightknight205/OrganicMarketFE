@@ -29,6 +29,9 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PaymentComponent } from './components/payment/payment.component';
+import { SeparatorDirective } from './directives/format-number.directive';
+import { ContactComponent } from './components/contact/contact.component';
+import { RemoveCommaPipe } from './remove-comma.pipe';
 
 
 @NgModule({
@@ -47,7 +50,10 @@ import { PaymentComponent } from './components/payment/payment.component';
     HistoryComponent,
     BlogComponent,
     FavouriteComponent,
-    PaymentComponent
+    PaymentComponent,
+    ContactComponent,
+    SeparatorDirective,
+    RemoveCommaPipe
     //admin    
     //AdminComponent,
     //OrderAdminComponent,

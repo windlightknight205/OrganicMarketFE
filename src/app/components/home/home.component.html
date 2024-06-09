@@ -54,8 +54,9 @@
                 </div>
                 <div class="featured__controls">
                     <ul>
-                        <li><span (click)="searchProductsWithCat('')">Tất cả</span></li>
-                        <li *ngFor="let category of categories" (click)="searchProductsWithCat(category.id)">
+                        <li [class.active]="0 === activeCategory"><span (click)="searchProductsWithCat(''); setActiveCategory(0)" >Tất cả</span></li>
+                        <li *ngFor="let category of categories" (click)="searchProductsWithCat(category.id) ;setActiveCategory(category.id) "  
+                        [class.active]="category.id === activeCategory">
                            <span> {{category.name}} </span>
                         </li>
                     </ul>
@@ -104,14 +105,9 @@
 <div class="banner">
     <div class="container">
         <div class="row">
-            <div class="col-lg-6 col-md-6 col-sm-6">
+            <div class="col-lg-12 col-md-6 col-sm-6">
                 <div class="banner__pic">
-                    <img src="assets/img/banner/banner-1.jpg" alt="">
-                </div>
-            </div>
-            <div class="col-lg-6 col-md-6 col-sm-6">
-                <div class="banner__pic">
-                    <img src="assets/img/banner/banner-2.jpg" alt="">
+                    <img src="assets/img/banner.jpg" alt="">
                 </div>
             </div>
         </div>
@@ -131,7 +127,7 @@
                 <div class="col-lg-4 col-md-4 col-sm-6">
                     <div class="blog__item">
                         <div class="blog__item__pic">
-                            <img src="img/blog/blog-1.jpg" alt="">
+                            <img src="assets/img/blog/blog-1.jpg" alt="">
                         </div>
                         <div class="blog__item__text">
                             <ul>
@@ -146,7 +142,7 @@
                 <div class="col-lg-4 col-md-4 col-sm-6">
                     <div class="blog__item">
                         <div class="blog__item__pic">
-                            <img src="img/blog/blog-2.jpg" alt="">
+                            <img src="assets/img/blog/blog-2.jpg" alt="">
                         </div>
                         <div class="blog__item__text">
                             <ul>
@@ -161,7 +157,7 @@
                 <div class="col-lg-4 col-md-4 col-sm-6">
                     <div class="blog__item">
                         <div class="blog__item__pic">
-                            <img src="img/blog/blog-3.jpg" alt="">
+                            <img src="assets/img/blog/blog-3.jpg" alt="">
                         </div>
                         <div class="blog__item__text">
                             <ul>

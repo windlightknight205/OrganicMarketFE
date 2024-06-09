@@ -108,7 +108,7 @@ export class DetailProductComponent implements OnInit {
   }
   getProducts(keyword: string, selectedCategoryId: number, page: number, limit: number) {
     debugger;
-    this.productService.getProducts(keyword, selectedCategoryId, page, limit).subscribe({
+    this.productService.getProducts('',keyword, selectedCategoryId, page, limit).subscribe({
       next: (response: any) => {
         debugger;
         response.products.forEach((product: Product) => {

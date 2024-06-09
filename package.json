@@ -32,6 +32,7 @@
     "class-validator": "^0.14.0",
     "dotenv": "^16.3.1",
     "font-awesome": "^4.7.0",
+    "ngx-print": "1.4.x",
     "primeicons": "^7.0.0",
     "primeng": "^16.9.1",
     "rxjs": "~7.8.0",

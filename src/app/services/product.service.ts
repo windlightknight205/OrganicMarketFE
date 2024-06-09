@@ -16,18 +16,37 @@ export class ProductService {
   constructor(private http: HttpClient) { }
 
   getProducts(
+    sortBy:string,
     keyword: string,
     categoryId: number,
     page: number,
     limit: number
   ): Observable<Product[]> {
     const params = {
+      sortBy: sortBy ,
       keyword: keyword,
       category_id: categoryId.toString(),
       page: page.toString(),
       limit: limit.toString()
     };
     return this.http.get<Product[]>(`${this.apiBaseUrl}/products`, { params });
+  }
+
+  getProductsByPrice(
+    minPrice:number,
+    maxPrice: number,
+    categoryId: number,
+    page: number,
+    limit: number
+  ): Observable<Product[]> {
+    const params = {
+      minPrice: minPrice ,
+      maxPrice: maxPrice,
+      category_id: categoryId.toString(),
+      page: page.toString(),
+      limit: limit.toString()
+    };
+    return this.http.get<Product[]>(`${this.apiBaseUrl}/products/search-by-price`, { params });
   }
 
   getDetailProduct(productId: number): Observable<Product> {
@@ -42,9 +61,11 @@ export class ProductService {
     return this.http.delete(`${this.apiBaseUrl}/products/${productId}`, { responseType: 'text' });
   }
   updateProduct(productId: number, updatedProduct: UpdateProductDTO): Observable<UpdateProductDTO> {
+    debugger
     return this.http.put<Product>(`${this.apiBaseUrl}/products/${productId}`, updatedProduct);
   }  
   insertProduct(insertProductDTO: InsertProductDTO): Observable<any> {
+    debugger
     // Add a new product
     return this.http.post(`${this.apiBaseUrl}/products`, insertProductDTO);
   }

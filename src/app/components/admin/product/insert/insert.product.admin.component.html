@@ -1,43 +1,59 @@
+<p-toast position="center"></p-toast>
 <div class="container">
     <div class="row">
       <div class="col-md-6 offset-md-3">
         <h3>Thêm sản phẩm</h3>
-        <form (ngSubmit)="insertProduct()" enctype="multipart/form-data">
+        <form (ngSubmit)="insertProduct()" enctype="multipart/form-data" #productForm="ngForm">
           <div class="form-group">
             <label for="name">Tên:</label>
-            <input type="text" id="name" [(ngModel)]="insertProductDTO.name" name="name" class="form-control" required>
+            <input type="text" id="name" [(ngModel)]="insertProductDTO.name" name="name" class="form-control" required #name="ngModel">
+            <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
+              <div *ngIf="name.errors?.['required']">Tên không được để trống.</div>
+            </div>
           </div>
-  
+        
           <div class="form-group mb-3">
             <label for="price">Giá:</label>
-            <input type="text" id="price" [(ngModel)]="insertProductDTO.price" name="price" class="form-control col-md-3" required>
+            <input type="text" id="price" [(ngModel)]="insertProductDTO.price" name="price" class="form-control col-md-3" required #price="ngModel">
+            <div *ngIf="price.invalid && (price.dirty || price.touched)" class="alert alert-danger">
+              <div *ngIf="price.errors?.['required']">Giá không được để trống.</div>
+            </div>
           </div>
-  
+        
           <div class="form-group mb-3">
             <label for="description">Mô tả:</label>
-            <textarea id="description" [(ngModel)]="insertProductDTO.description" name="description" class="form-control" required></textarea>
+            <textarea style="height: 300px;" id="description" [(ngModel)]="insertProductDTO.description" name="description" class="form-control" required #description="ngModel"></textarea>
+            <div *ngIf="description.invalid && (description.dirty || description.touched)" class="alert alert-danger">
+              <div *ngIf="description.errors?.['required']">Mô tả không được để trống.</div>
+            </div>
           </div>
-
+        
           <div class="form-group mb-3">
-            <label for="description">Khối lượng/ dung tích:</label>
-            <input type="text" id="weight" [(ngModel)]="insertProductDTO.weight" name="weight" class="form-control col-md-3" required>
+            <label for="weight">Khối lượng/ dung tích:</label>
+            <input type="text" id="weight" [(ngModel)]="insertProductDTO.weight" name="weight" class="form-control col-md-3" required #weight="ngModel">
+            <div *ngIf="weight.invalid && (weight.dirty || weight.touched)" class="alert alert-danger">
+              <div *ngIf="weight.errors?.['required']">Khối lượng/ dung tích không được để trống.</div>
+            </div>
           </div>
-
+        
           <div class="form-group mb-3">
             <label for="category">Danh mục:</label>
-            <select id="category" [(ngModel)]="insertProductDTO.category_id" name="category" class="form-control" required>
-              <!-- Display list of categories -->
+            <select id="category" [(ngModel)]="insertProductDTO.category_id" name="category" class="form-control" required #category="ngModel">
               <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
             </select>
+            <div *ngIf="category.invalid && (category.dirty || category.touched)" class="alert alert-danger">
+              <div *ngIf="category.errors?.['required']">Danh mục không được để trống.</div>
+            </div>
           </div>
-  
+        
           <div class="form-group mb-3">
             <label for="images">Ảnh (tối đa 5):</label>
             <input type="file" id="images" name="images" multiple (change)="onFileChange($event)" accept="image/*">
           </div>
-  
-          <button type="submit" class="btn btn-primary">Insert</button>
+        
+          <button type="submit" class="btn btn-primary" [disabled]="productForm.invalid">Thêm</button>
         </form>
+        
       </div>
     </div>
   </div>

@@ -5,12 +5,15 @@ import { InsertProductDTO } from '../../../../dtos/product/insert.product.dto';
 import { Category } from '../../../../models/category';
 import { CategoryService } from '../../../../services/category.service';
 import { ProductService } from '../../../../services/product.service';
+import { MessageService } from 'primeng/api';
 @Component({
   selector: 'app-insert.product.admin',
   templateUrl: './insert.product.admin.component.html',
   styleUrls: ['./insert.product.admin.component.scss']
 })
+
 export class InsertProductAdminComponent implements OnInit {
+  productId :number = 0;
   insertProductDTO: InsertProductDTO = {
     name: '',
     price: 0,
@@ -25,13 +28,19 @@ export class InsertProductAdminComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private categoryService: CategoryService,    
-    private productService: ProductService,    
+    private productService: ProductService, 
+    private messageService: MessageService   
   ) {
     
   } 
   ngOnInit() {
     this.getCategories(1, 100)
-  } 
+  }
+  
+  executeToast(severity: string, message: string) {
+    this.messageService.add({ severity: severity, summary: '', detail: message });
+  }
+
   getCategories(page: number, limit: number) {
     this.categoryService.getCategories(page, limit).subscribe({
       next: (categories: Category[]) => {
@@ -65,14 +74,21 @@ export class InsertProductAdminComponent implements OnInit {
       next: (response) => {
         debugger
         if (this.insertProductDTO.images.length > 0) {
-          const productId = response.id; // Assuming the response contains the newly created product's ID
-          this.productService.uploadImages(productId, this.insertProductDTO.images).subscribe({
+          this.productId = response.id; // Assuming the response contains the newly created product's ID
+          this.productService.uploadImages(this.productId, this.insertProductDTO.images).subscribe({
             next: (imageResponse) => {
               debugger
               // Handle the uploaded images response if needed              
               console.log('Images uploaded successfully:', imageResponse);
+              setTimeout(() => {
+                this.productService.updateProduct(this.productId, this.insertProductDTO).subscribe({
+                  next:()=>{
+                    console.log("success")
+                  }
+                });
+                this.router.navigate(['../'], { relativeTo: this.route });
+              }, 500);   
               // Navigate back to the previous page
-              this.router.navigate(['../'], { relativeTo: this.route });
             },
             error: (error) => {
               // Handle the error while uploading images
@@ -82,10 +98,13 @@ export class InsertProductAdminComponent implements OnInit {
           })          
         }
       },
+      complete: ()=>{
+       
+      },
       error: (error) => {
         debugger
         // Handle error while inserting the product
-        alert(error.error)
+        this.executeToast('error','Xảy ra lỗi '+ error)
         console.error('Error inserting product:', error);
       }
     });    

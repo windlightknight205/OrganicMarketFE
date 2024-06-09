@@ -25,7 +25,7 @@ export class HomeComponent implements OnInit {
   visiblePages: number[] = [];
   keyword: string = "";
   isPressedAddToCart: boolean = false;
-
+  activeCategory: number = 0;
   constructor(
     private productService: ProductService,
     private categoryService: CategoryService,
@@ -71,7 +71,7 @@ export class HomeComponent implements OnInit {
 
   getProducts(keyword: string, selectedCategoryId: number, page: number, limit: number) {
     // debugger;
-    this.productService.getProducts(keyword, selectedCategoryId, page, limit).subscribe({
+    this.productService.getProducts('',keyword, selectedCategoryId, page, limit).subscribe({
       next: (response: any) => {
         debugger;
         response.products.forEach((product: Product) => {
@@ -151,5 +151,9 @@ export class HomeComponent implements OnInit {
   }
   executeToast(message:string) {
     this.messageService.add({severity:'success', summary: '', detail: message});
+  }
+
+  setActiveCategory(categoryId: number) {
+    this.activeCategory = categoryId;
   }
 }

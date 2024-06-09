@@ -8,6 +8,7 @@ import { CategoryService } from '../../../../services/category.service';
 import { environment } from '../../../../../environments/environment';
 import { ProductImage } from '../../../../models/product.image';
 import { UpdateProductDTO } from '../../../../dtos/product/update.product.dto';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-detail.product.admin',
@@ -29,7 +30,7 @@ export class UpdateProductAdminComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private categoryService: CategoryService,
-    private location: Location,
+    private messageService: MessageService
   ) {
     this.productId = 0;
     this.product = {} as Product;
@@ -43,6 +44,11 @@ export class UpdateProductAdminComponent implements OnInit {
     });
     this.getCategories(1, 100);
   }
+
+  executeToast(severity: string, message: string) {
+    this.messageService.add({ severity: severity, summary: '', detail: message });
+  }
+
   getCategories(page: number, limit: number) {
     this.categoryService.getCategories(page, limit).subscribe({
       next: (categories: Category[]) => {
@@ -92,10 +98,14 @@ export class UpdateProductAdminComponent implements OnInit {
       },
       complete: () => {
         debugger;
-        this.router.navigate(['/admin/products']);
+        this.executeToast('success','Cập nhật sản phẩm thành công');
+        setTimeout(() => {
+          this.router.navigate(['/admin/products']);
+        }, 1000);   
       },
       error: (error: any) => {
         debugger;
+        this.executeToast('error','Xảy ra lỗi')
         console.error('Error fetching products:', error);
       }
     });
@@ -152,7 +162,7 @@ export class UpdateProductAdminComponent implements OnInit {
       },
       error: (error) => {
         // Handle the error while uploading images
-        alert(error.error)
+        this.executeToast('error',error.error);
         console.error('Error uploading images:', error);
       }
     })

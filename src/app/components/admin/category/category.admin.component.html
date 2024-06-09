@@ -1,5 +1,6 @@
+<p-toast position="center"></p-toast>
 <div class="container">
-    <h1>Category Admin</h1>        
+    <h1>Quản lý danh mục</h1>        
     <div class="row">
       <div class="col-md-8 ">
         <button class="btn btn-success" (click)="insertCategory()">Thêm danh mục mới</button>
@@ -9,8 +10,8 @@
       <thead class="table-light">
         <tr>
           <th>ID</th>
-          <th>Name</th>          
-          <th>Actions</th>
+          <th>Tên</th>          
+          <th>Hành động</th>
         </tr>
       </thead>
       <tbody>
@@ -22,10 +23,10 @@
             <div style="display: flex; gap: 10px;">
               <button class="btn btn-primary" 
                   (click)="updateCategory(category.id)">
-                Update
+                Cập nhật
               </button>
               <button class="btn btn-danger" 
-                (click)="deleteCategory(category)">Delete
+                (click)="deleteCategory(category)">Xóa
               </button>            
               </div>
           </td>          
